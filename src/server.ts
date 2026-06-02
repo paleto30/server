@@ -1,4 +1,4 @@
-import path from "path";
+import dotenv from 'dotenv'
 import express from "express";
 import http from "http"
 import { WebSocketServer } from "ws";
@@ -7,6 +7,8 @@ import { routeMessage } from "./handlers/index.js";
 import clients from "./clients.js";
 
 const app = express()
+
+dotenv.config()
 
 const httpServer = http.createServer(app)
 
@@ -45,8 +47,12 @@ wss.on("connection", (rawSocket) => {
 })
 
 
-const PORT = 3000;
+const port = Number(process.env.PORT);
 
-httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Servidor en http://0.0.0.0:${PORT}`);
+if (!port) {
+    throw new Error("PORT no está definido");
+}
+
+httpServer.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 Servidor en http://0.0.0.0:${port}`);
 });
